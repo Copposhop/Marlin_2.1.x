@@ -83,8 +83,8 @@
 #define HEATER_0_PIN                        PD12  // HOT-END
 #define HEATER_BED_PIN                      PG11  // HOT-BED
 
-#ifndef FAN_PIN
-  #define FAN_PIN                           PG14  // MAIN BOARD FAN
+#ifndef FAN0_PIN
+  #define FAN0_PIN                          PG14  // MAIN BOARD FAN
 #endif
 
 #define FAN_SOFT_PWM_REQUIRED
@@ -171,7 +171,7 @@
       #define LCD_SDSS                      PD5   // 53
       #define SD_DETECT_PIN                 PD1   // 49
 
-    #elif ANY(VIKI2, miniVIKI)
+    #elif EITHER(VIKI2, miniVIKI)
 
       #define BEEPER_PIN                    PC1   // 33
 

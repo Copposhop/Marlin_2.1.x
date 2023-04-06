@@ -109,10 +109,10 @@ void menu_media_filelist() {
   ui.encoder_direction_menus();
 
   #if HAS_MARLINUI_U8GLIB
-    static uint16_t fileCnt;
-    if (ui.first_page) fileCnt = card.get_num_Files();
+    static int16_t fileCnt;
+    if (ui.first_page) fileCnt = card.get_num_items();
   #else
-    const uint16_t fileCnt = card.get_num_Files();
+    const int16_t fileCnt = card.get_num_items();
   #endif
 
   START_MENU();
@@ -122,16 +122,16 @@ void menu_media_filelist() {
     BACK_ITEM_F(TERN1(BROWSE_MEDIA_ON_INSERT, screen_history_depth) ? GET_TEXT_F(MSG_MAIN) : GET_TEXT_F(MSG_BACK));
   #endif
   if (card.flag.workDirIsRoot) {
-    #if !PIN_EXISTS(SD_DETECT)
+    #if !HAS_SD_DETECT
       ACTION_ITEM(MSG_REFRESH, []{ encoderTopLine = 0; card.mount(); });
     #endif
   }
   else if (card.isMounted())
     ACTION_ITEM_F(F(LCD_STR_FOLDER " .."), lcd_sd_updir);
 
-  if (ui.should_draw()) for (uint16_t i = 0; i < fileCnt; i++) {
+  if (ui.should_draw()) for (int16_t i = 0; i < fileCnt; i++) {
     if (_menuLineNr == _thisItemNr) {
-      card.getfilename_sorted(SD_ORDER(i, fileCnt));
+      card.selectFileByIndexSorted(i);
       if (card.flag.filenameIsDir)
         MENU_ITEM(sdfolder, MSG_MEDIA_MENU, card);
       else

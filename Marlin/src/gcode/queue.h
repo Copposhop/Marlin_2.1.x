@@ -141,12 +141,13 @@ public:
    * Enqueue and return only when commands are actually enqueued
    */
   static void enqueue_one_now(const char * const cmd);
+  static void enqueue_one_now(FSTR_P const fcmd);
 
   /**
    * Attempt to enqueue a single G-code command
    * and return 'true' if successful.
    */
-  static bool enqueue_one(FSTR_P const fgcode);
+  static bool enqueue_one(FSTR_P const fcmd);
 
   /**
    * Enqueue with Serial Echo
@@ -199,6 +200,12 @@ public:
    * the next expected line number.
    */
   static void flush_and_request_resend(const serial_index_t serial_ind);
+
+  #if (defined(ARDUINO_ARCH_STM32F4) || defined(ARDUINO_ARCH_STM32)) && defined(USBCON)
+    static void flush_rx();
+  #else
+    static void flush_rx() {}
+  #endif
 
   /**
    * (Re)Set the current line number for the last received command
